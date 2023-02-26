@@ -6,13 +6,14 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/marlonbarreto-git/rest-api-crud-go/internal/infrastructure"
+	"github.com/marlonbarreto-git/rest-api-crud-go/internal/infrastructure/context"
 	"github.com/marlonbarreto-git/rest-api-crud-go/internal/infrastructure/roles"
 )
 
 var buildContext = infrastructure.NewContextBuilder()
 
 func main() {
-	ctx := infrastructure.InitializeContext()
+	ctx := context.InitializeContext()
 
 	server := &infrastructure.Server{}
 	gin.SetMode(gin.DebugMode)
@@ -36,7 +37,7 @@ func main() {
 	}
 }
 
-func getRoles(ctx infrastructure.AppContext) []roles.Role {
+func getRoles(ctx context.AppContext) []roles.Role {
 	if ctx.Role().IsAll() {
 		return roles.GetAllRoles()
 	}

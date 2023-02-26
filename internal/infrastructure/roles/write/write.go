@@ -1,7 +1,11 @@
 package write
 
 import (
+	"fmt"
+
 	"github.com/gin-gonic/gin"
+
+	"github.com/marlonbarreto-git/rest-api-crud-go/internal/domain/municipalities/http"
 	"github.com/marlonbarreto-git/rest-api-crud-go/internal/infrastructure/dependencies"
 )
 
@@ -14,6 +18,8 @@ func NewWrite(container *dependencies.Container) *write {
 }
 
 func (write *write) RegisterRoutes(basePath string) func(group *gin.RouterGroup) {
+	municipalityHandler := http.NewHandler(write.container)
+
 	return func(g *gin.RouterGroup) {
 		v1Group := g.Group(basePath + "/v1")
 		roleGroup := v1Group.Group("/write")
@@ -23,5 +29,11 @@ func (write *write) RegisterRoutes(basePath string) func(group *gin.RouterGroup)
 				"message": "pong",
 			})
 		})
+
+		municipalitiesGroup := roleGroup.Group("/municipalities")
+
+		municipalitiesGroup.POST("", municipalityHandler.CreateMunicipality)
+		municipalitiesGroup.PATCH(fmt.Sprintf("/:%s", http.IdParam), municipalityHandler.UpdateMunicipality)
+		municipalitiesGroup.DELETE(fmt.Sprintf("/:%s", http.IdParam), municipalityHandler.DeleteMunicipality)
 	}
 }
