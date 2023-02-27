@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS PERSON
 	sex TEXT NOT NULL COLLATE NOCASE,
 	id_home TEXT NULL COLLATE NOCASE,
 	CONSTRAINT FK_PERSON_HOUSE FOREIGN KEY (id_home) REFERENCES HOUSE (id_cadastral) ON DELETE No Action ON UPDATE No Action,
-	CONSTRAINT CS_sex CHECK (sexo in ('M','F','N'))
+	CONSTRAINT CS_sex CHECK (sex in ('M','F','N'))
 )
 ;
 
@@ -59,3 +59,30 @@ CREATE INDEX IXFK_RESPONSIBLE_PERSON_PERSON
 CREATE INDEX IXFK_RESPONSIBLE_PERSON_PERSON_02
  ON RESPONSIBLE_PERSON (id_person ASC)
 ;
+
+
+-----------------------------------------------------------------------------------
+--inserts
+-----------------------------------------------------------------------------------
+INSERT INTO MUNICIPALITY (id_municipality,municipality_name) 
+VALUES
+  (513,'Pacho'),
+  (740,'Sibate'),
+  (817,'Tocancipa'),
+  (205,'Concordia');
+
+INSERT INTO HOUSE (id_cadastral,address,id_owner,id_municipality) 
+VALUES 
+  ('abc123','calle 4 carrera 1',1000223422,513),
+  ('abc124','calle 3 carrera 2',1000223423,205),
+  ('abc125','calle 2 carrera 3',1000223424,740),
+  ('abc126','calle 1 carrera 4',1000223425,817);
+
+INSERT INTO PERSON (id_number,forename,surname,birth_date,sex,id_home)
+VALUES
+  (1000223422,'Juan','Martinez','18-04-1998','M','abc123'),
+  (1000223423,'Andrea','Quevedo','14-03-2018','F','abc123'),
+  (1000223424,'Martín','Pelaez','02-11-1987','M','abc124'),
+  (1000223425,'Alan','Brito','29-08-1968','N','abc126');
+
+INSERT INTO RESPONSIBLE_PERSON VALUES('1000223422','1000223423')
