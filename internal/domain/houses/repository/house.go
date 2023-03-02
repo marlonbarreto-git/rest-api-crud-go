@@ -122,7 +122,7 @@ func (repo *repository) getPageData(size int) (count int, pages int, error *util
 }
 
 func (repo *repository) getHouses(size, page int) (entities.Houses, *utils.Error) {
-	query := "SELECT id_cadastral, address, id_owner, id_municipality FROM MUNICIPALITY LIMIT ? OFFSET ?"
+	query := "SELECT id_cadastral, address, id_owner, id_municipality FROM HOUSE LIMIT ? OFFSET ?"
 	rows, err := repo.database.Query(query, size, (page-1)*size)
 	if err != nil {
 		return nil, utils.NewError(err, "error executing query")

@@ -2,7 +2,7 @@ package read
 
 import (
 	"github.com/gin-gonic/gin"
-
+	hhttp "github.com/marlonbarreto-git/rest-api-crud-go/internal/domain/houses/http"
 	"github.com/marlonbarreto-git/rest-api-crud-go/internal/domain/municipalities/http"
 	"github.com/marlonbarreto-git/rest-api-crud-go/internal/infrastructure/dependencies"
 )
@@ -17,6 +17,7 @@ func NewRead(container *dependencies.Container) *read {
 
 func (read *read) RegisterRoutes(basePath string) func(group *gin.RouterGroup) {
 	municipalityHandler := http.NewHandler(read.container)
+	houseHandler := hhttp.NewHandler(read.container)
 
 	return func(g *gin.RouterGroup) {
 		v1Group := g.Group(basePath + "/v1")
@@ -29,8 +30,10 @@ func (read *read) RegisterRoutes(basePath string) func(group *gin.RouterGroup) {
 		})
 
 		municipalitiesGroup := roleGroup.Group("/municipalities")
-
 		municipalitiesGroup.GET("/", municipalityHandler.GetMunicipalities)
 		municipalitiesGroup.GET("/:id", municipalityHandler.GetMunicipalityById)
+		housesGroup := roleGroup.Group("/houses")
+		housesGroup.GET("/", houseHandler.GetHouses)
+		housesGroup.GET("/:id", houseHandler.GetHouseById)
 	}
 }
