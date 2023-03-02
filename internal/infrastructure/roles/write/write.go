@@ -2,6 +2,8 @@ package write
 
 import (
 	"fmt"
+	phttp "github.com/marlonbarreto-git/rest-api-crud-go/internal/domain/people/http"
+	rhttp "github.com/marlonbarreto-git/rest-api-crud-go/internal/domain/responsible_people/http"
 
 	"github.com/gin-gonic/gin"
 
@@ -21,6 +23,8 @@ func NewWrite(container *dependencies.Container) *Write {
 func (write *Write) RegisterRoutes(basePath string) func(group *gin.RouterGroup) {
 	municipalityHandler := http.NewHandler(write.container)
 	houseHandler := hhttp.NewHandler(write.container)
+	personHandler := phttp.NewHandler(write.container)
+	responsibleHandler := rhttp.NewHandler(write.container)
 
 	return func(g *gin.RouterGroup) {
 		v1Group := g.Group(basePath + "/v1")
@@ -38,7 +42,14 @@ func (write *Write) RegisterRoutes(basePath string) func(group *gin.RouterGroup)
 		municipalitiesGroup.DELETE(fmt.Sprintf("/:%s", http.IdParam), municipalityHandler.DeleteMunicipality)
 		housesGroup := roleGroup.Group("/houses")
 		housesGroup.POST("", houseHandler.CreateHouse)
-		housesGroup.PATCH(fmt.Sprintf("/:%s", http.IdParam), houseHandler.UpdateHouse)
-		housesGroup.DELETE(fmt.Sprintf("/:%s", http.IdParam), houseHandler.DeleteHouse)
+		housesGroup.PATCH(fmt.Sprintf("/:%s", hhttp.IdParam), houseHandler.UpdateHouse)
+		housesGroup.DELETE(fmt.Sprintf("/:%s", hhttp.IdParam), houseHandler.DeleteHouse)
+		peopleGroup := roleGroup.Group("/people")
+		peopleGroup.POST("", personHandler.CreatePerson)
+		peopleGroup.PATCH(fmt.Sprintf("/:%s", phttp.IdParam), personHandler.UpdatePerson)
+		peopleGroup.DELETE(fmt.Sprintf("/:%s", phttp.IdParam), personHandler.DeletePerson)
+		responsiblesGroup := roleGroup.Group("/responsibles")
+		responsiblesGroup.POST("", responsibleHandler.CreateResponsible)
+		responsiblesGroup.DELETE(fmt.Sprintf("/:%s", rhttp.IdParam), responsibleHandler.DeleteResponsible)
 	}
 }

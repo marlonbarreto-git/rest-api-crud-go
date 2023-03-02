@@ -4,6 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	hhttp "github.com/marlonbarreto-git/rest-api-crud-go/internal/domain/houses/http"
 	"github.com/marlonbarreto-git/rest-api-crud-go/internal/domain/municipalities/http"
+	phttp "github.com/marlonbarreto-git/rest-api-crud-go/internal/domain/people/http"
+	rhttp "github.com/marlonbarreto-git/rest-api-crud-go/internal/domain/responsible_people/http"
 	"github.com/marlonbarreto-git/rest-api-crud-go/internal/infrastructure/dependencies"
 )
 
@@ -18,6 +20,8 @@ func NewRead(container *dependencies.Container) *read {
 func (read *read) RegisterRoutes(basePath string) func(group *gin.RouterGroup) {
 	municipalityHandler := http.NewHandler(read.container)
 	houseHandler := hhttp.NewHandler(read.container)
+	personHandler := phttp.NewHandler(read.container)
+	responsibleHandler := rhttp.NewHandler(read.container)
 
 	return func(g *gin.RouterGroup) {
 		v1Group := g.Group(basePath + "/v1")
@@ -35,5 +39,12 @@ func (read *read) RegisterRoutes(basePath string) func(group *gin.RouterGroup) {
 		housesGroup := roleGroup.Group("/houses")
 		housesGroup.GET("/", houseHandler.GetHouses)
 		housesGroup.GET("/:id", houseHandler.GetHouseById)
+		peopleGroup := roleGroup.Group("/people")
+		peopleGroup.GET("/", personHandler.GetPeople)
+		peopleGroup.GET("/:id", personHandler.GetPersonById)
+		responsiblesGroup := roleGroup.Group("/responsibles")
+		responsiblesGroup.GET("/", responsibleHandler.GetResponsibles)
+		responsiblesGroup.GET("/:id", responsibleHandler.GetResponsibleById)
+
 	}
 }
