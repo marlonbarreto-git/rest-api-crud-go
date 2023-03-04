@@ -69,32 +69,29 @@ func (repo *repository) CreateResponsible(responsible entities.ResponsiblePayloa
 		return nil, utils.NewError(err, "error executing statement")
 	}
 
-	rawId, err := result.LastInsertId()
-	if err != nil {
-		return nil, utils.NewError(err, "error getting last insert rawId")
+	if rows, err := result.RowsAffected(); err != nil || rows < 1 {
+		return nil, utils.NewError(err, "error validating affected rows")
 	}
 
-	id := int(rawId)
-
 	return &entities.Responsible{
-		IdResponsible: &id,
+		IdResponsible: responsible.IdResponsible,
 		IdPerson:      responsible.IdPerson,
 	}, nil
 }
 
-func (repo *repository) DeleteResponsible(id int) *utils.Error {
-	stmt, err := repo.database.Prepare("DELETE FROM RESPONSIBLE_PERSON WHERE id_person = ?")
+func (repo *repository) DeleteResponsible(responsibleID, personID int) *utils.Error {
+	stmt, err := repo.database.Prepare("DELETE FROM RESPONSIBLE_PERSON WHERE id_person = ? AND id_responsible = ?")
 	if err != nil {
 		return utils.NewError(err, "error preparing delete statement")
 	}
 
-	result, err := stmt.Exec(id)
+	result, err := stmt.Exec(personID, responsibleID)
 	if err != nil {
 		return utils.NewError(err, "error executing delete statement")
 	}
 
 	rowsAffected, err := result.RowsAffected()
-	if err != nil {
+	if rows, err := result.RowsAffected(); err != nil || rows < 1 {
 		return utils.NewError(err, "error getting rows affected")
 	}
 

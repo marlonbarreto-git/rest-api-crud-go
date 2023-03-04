@@ -33,7 +33,7 @@ func (handler *handler) DeleteResponsible(ctx *gin.Context) {
 		return
 	}
 
-	if err := handler.useCase.DeleteResponsible(pathParams.Id); err != nil {
+	if err := handler.useCase.DeleteResponsible(pathParams.ResponsibleID, pathParams.PersonID); err != nil {
 		statusCode := utils.ConvertMessageToCode(string(err.Message))
 		ctx.JSON(statusCode, err)
 		return

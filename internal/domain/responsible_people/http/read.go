@@ -33,7 +33,7 @@ func (handler *handler) GetResponsibleById(ctx *gin.Context) {
 		return
 	}
 
-	responsible, err := handler.useCase.GetResponsible(pathParams.Id)
+	responsible, err := handler.useCase.GetResponsible(pathParams.ResponsibleID)
 	if err != nil {
 		statusCode := utils.ConvertMessageToCode(string(err.Message))
 		ctx.JSON(statusCode, err)
