@@ -10,11 +10,11 @@ import (
 
 type (
 	House interface {
-		GetHouse(id int) (*entities.House, *utils.Error)
+		GetHouse(id string) (*entities.House, *utils.Error)
 		GetHouses(size, page int) (*entities.HousesPage, *utils.Error)
 		CreateHouse(house entities.HousePayload) (*entities.House, *utils.Error)
 		UpdateHouse(house entities.HousePayload) (*entities.House, *utils.Error)
-		DeleteHouse(id int) *utils.Error
+		DeleteHouse(id string) *utils.Error
 	}
 
 	repository struct {

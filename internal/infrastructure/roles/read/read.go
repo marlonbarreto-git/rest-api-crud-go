@@ -36,15 +36,17 @@ func (read *read) RegisterRoutes(basePath string) func(group *gin.RouterGroup) {
 		municipalitiesGroup := roleGroup.Group("/municipalities")
 		municipalitiesGroup.GET("/", municipalityHandler.GetMunicipalities)
 		municipalitiesGroup.GET("/:id", municipalityHandler.GetMunicipalityById)
+
 		housesGroup := roleGroup.Group("/houses")
 		housesGroup.GET("/", houseHandler.GetHouses)
 		housesGroup.GET("/:id", houseHandler.GetHouseById)
+
 		peopleGroup := roleGroup.Group("/people")
 		peopleGroup.GET("/", personHandler.GetPeople)
 		peopleGroup.GET("/:id", personHandler.GetPersonById)
+
 		responsiblesGroup := roleGroup.Group("/responsibles")
 		responsiblesGroup.GET("/", responsibleHandler.GetResponsibles)
 		responsiblesGroup.GET("/:id", responsibleHandler.GetResponsibleById)
-
 	}
 }

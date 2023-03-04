@@ -7,18 +7,33 @@ import (
 )
 
 func (repo *repository) GetResponsible(id int) (*entities.Responsible, *utils.Error) {
-	var entity entities.Responsible
-	err := repo.database.QueryRow("SELECT * FROM RESPONSIBLE_PERSON WHERE id_responsible = ?", id).
-		Scan(&entity.IdResponsible, &entity.IdPerson)
+	query := "SELECT id_person FROM RESPONSIBLE_PERSON WHERE id_responsible = ?"
+
+	rows, err := repo.database.Query(query, id)
 	if err != nil {
 		return nil, utils.NewError(err, "error executing query")
 	}
+	defer rows.Close()
 
-	if entity.IsEmpty() {
+	responsible := entities.Responsible{
+		IdResponsible: &id,
+		People:        []int{},
+	}
+
+	for rows.Next() {
+		var personID int
+		if err := rows.Scan(&personID); err != nil {
+			return nil, utils.NewError(err, "error scanning row")
+		}
+
+		responsible.People = append(responsible.People, personID)
+	}
+
+	if len(responsible.People) == 0 {
 		return nil, utils.NewError(fmt.Errorf("responsible %d not found", id), utils.NotFound)
 	}
 
-	return &entity, nil
+	return &responsible, nil
 }
 
 func (repo *repository) GetResponsibles(size, page int) (*entities.ResponsiblesPage, *utils.Error) {

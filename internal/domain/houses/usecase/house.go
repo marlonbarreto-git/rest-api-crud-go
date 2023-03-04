@@ -5,7 +5,7 @@ import (
 	"github.com/marlonbarreto-git/rest-api-crud-go/utils"
 )
 
-func (uc *useCase) GetHouse(id int) (*entities.House, *utils.Error) {
+func (uc *useCase) GetHouse(id string) (*entities.House, *utils.Error) {
 	return uc.repository.GetHouse(id)
 }
 
@@ -21,6 +21,6 @@ func (uc *useCase) UpdateHouse(house *entities.HousePayload) (*entities.House, *
 	return uc.repository.UpdateHouse(*house)
 }
 
-func (uc *useCase) DeleteHouse(id int) *utils.Error {
+func (uc *useCase) DeleteHouse(id string) *utils.Error {
 	return uc.repository.DeleteHouse(id)
 }

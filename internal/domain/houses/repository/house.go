@@ -4,11 +4,12 @@ import (
 	"fmt"
 	"github.com/marlonbarreto-git/rest-api-crud-go/internal/domain/houses/entities"
 	"github.com/marlonbarreto-git/rest-api-crud-go/utils"
+	"strconv"
 )
 
-func (repo *repository) GetHouse(id int) (*entities.House, *utils.Error) {
+func (repo *repository) GetHouse(id string) (*entities.House, *utils.Error) {
 	var entity entities.House
-	err := repo.database.QueryRow("SELECT * FROM HOUSE WHERE id_municipality = ?", id).
+	err := repo.database.QueryRow("SELECT * FROM HOUSE WHERE id_cadastral = ?", id).
 		Scan(&entity.Id, &entity.Address, &entity.IdOwner, &entity.IdMunicipality)
 	if err != nil {
 		return nil, utils.NewError(err, "error executing query")
@@ -59,7 +60,7 @@ func (repo *repository) CreateHouse(house entities.HousePayload) (*entities.Hous
 		return nil, utils.NewError(err, "error getting last insert rawId")
 	}
 
-	id := int(rawId)
+	id := strconv.FormatInt(rawId, 10)
 
 	return &entities.House{
 		Id:             &id,
@@ -84,7 +85,7 @@ func (repo *repository) UpdateHouse(house entities.HousePayload) (*entities.Hous
 	}, nil
 }
 
-func (repo *repository) DeleteHouse(id int) *utils.Error {
+func (repo *repository) DeleteHouse(id string) *utils.Error {
 	stmt, err := repo.database.Prepare("DELETE FROM HOUSE WHERE id_cadastral = ?")
 	if err != nil {
 		return utils.NewError(err, "error preparing delete statement")
