@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/marlonbarreto-git/rest-api-crud-go/internal/domain/houses/entities"
 	"github.com/marlonbarreto-git/rest-api-crud-go/utils"
-	"strconv"
 )
 
 func (repo *repository) GetHouse(id string) (*entities.House, *utils.Error) {
@@ -45,25 +44,22 @@ func (repo *repository) GetHouses(size, page int) (*entities.HousesPage, *utils.
 }
 
 func (repo *repository) CreateHouse(house entities.HousePayload) (*entities.House, *utils.Error) {
-	stmt, err := repo.database.Prepare("INSERT INTO HOUSE(address,id_owner,id_municipality) VALUES(?,?,?)")
+	stmt, err := repo.database.Prepare("INSERT INTO HOUSE(id_cadastral,address,id_owner,id_municipality) VALUES(?,?,?,?)")
 	if err != nil {
 		return nil, utils.NewError(err, "error preparing statement")
 	}
 
-	result, err := stmt.Exec(house.Address, house.IdOwner, house.IdMunicipality)
+	result, err := stmt.Exec(house.Id, house.Address, house.IdOwner, house.IdMunicipality)
 	if err != nil {
 		return nil, utils.NewError(err, "error executing statement")
 	}
 
-	rawId, err := result.LastInsertId()
-	if err != nil {
-		return nil, utils.NewError(err, "error getting last insert rawId")
+	if rows, err := result.RowsAffected(); err != nil || rows < 1 {
+		return nil, utils.NewError(err, "error validating affected rows")
 	}
 
-	id := strconv.FormatInt(rawId, 10)
-
 	return &entities.House{
-		Id:             &id,
+		Id:             house.Id,
 		Address:        house.Address,
 		IdOwner:        house.IdOwner,
 		IdMunicipality: house.IdMunicipality,
