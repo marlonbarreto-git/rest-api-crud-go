@@ -17,6 +17,6 @@ func (uc *useCase) CreateResponsible(responsible *entities.ResponsiblePayload) (
 	return uc.repository.CreateResponsible(*responsible)
 }
 
-func (uc *useCase) DeleteResponsible(id int) *utils.Error {
-	return uc.repository.DeleteResponsible(id)
+func (uc *useCase) DeleteResponsible(responsibleID, personID int) *utils.Error {
+	return uc.repository.DeleteResponsible(responsibleID, personID)
 }

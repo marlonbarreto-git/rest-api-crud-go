@@ -12,7 +12,7 @@ type (
 		GetResponsible(id int) (*entities.Responsible, *utils.Error)
 		GetResponsibles(params *entities.ResponsiblesPageParams) (*entities.ResponsiblesPage, *utils.Error)
 		CreateResponsible(responsible *entities.ResponsiblePayload) (*entities.Responsible, *utils.Error)
-		DeleteResponsible(id int) *utils.Error
+		DeleteResponsible(responsibleID, personID int) *utils.Error
 	}
 
 	useCase struct {
