@@ -19,7 +19,10 @@ type (
 	}
 )
 
-const IdParam = "id"
+const (
+	ResponsibleIDParam = "responsibleId"
+	PersonIDParam      = "personId"
+)
 
 func NewHandler(container *dependencies.Container) Handler {
 	return &handler{

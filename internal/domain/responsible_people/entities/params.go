@@ -7,6 +7,7 @@ type (
 	}
 
 	ResponsibleParams struct {
-		Id int `uri:"id" binding:"required,gt=0"`
+		ResponsibleID int `uri:"responsibleId" binding:"required,gt=0"`
+		PersonID      int `uri:"personId" binding:"omitempty,gt=0"`
 	}
 )
