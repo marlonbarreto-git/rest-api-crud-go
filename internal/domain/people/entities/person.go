@@ -9,7 +9,7 @@ type (
 		Surname   *string `json:"surname"`
 		BirthDate *string `json:"birthDate"`
 		Sex       *string `json:"sex"`
-		IdHome    *int    `json:"idHome"`
+		IdHome    *string `json:"idHome"`
 	}
 
 	PeoplePage struct {

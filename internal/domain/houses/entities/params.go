@@ -7,6 +7,6 @@ type (
 	}
 
 	HouseParams struct {
-		Id int `uri:"id" binding:"required,gt=0"`
+		Id string `uri:"id" binding:"required"`
 	}
 )
