@@ -37,6 +37,10 @@ func main() {
 		}
 	}
 
+	config := cors.DefaultConfig()
+	config.AllowAllOrigins = true
+	server.Use(cors.New(config))
+
 	if err := server.Run(":" + port); err != nil {
 		panic(interface{}(err))
 	}
