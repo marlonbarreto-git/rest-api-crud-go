@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"net/http"
 
 	"github.com/marlonbarreto-git/rest-api-crud-go/internal/infrastructure"
 	"github.com/marlonbarreto-git/rest-api-crud-go/internal/infrastructure/context"
@@ -18,6 +19,25 @@ func main() {
 	server := &infrastructure.Server{}
 	gin.SetMode(gin.DebugMode)
 	server.Engine = gin.Default()
+
+	server.Engine.Use(func(c *gin.Context) {
+		c.Header("Access-Control-Allow-Origin", "*")
+		c.Header("Referrer-Policy", "no-referrer-when-downgrade")
+		c.Header("Content-Security-Policy", "default-src 'none'; frame-ancestors 'none'; sandbox")
+		c.Header("Content-Security-Policy", "connect-src 'self' http://localhost:8080")
+		c.Header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+		c.Header("Access-Control-Allow-Headers", "Content-Type, Authorization")
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(http.StatusOK)
+		}
+		c.Next()
+	})
+
+	server.Engine.Use(cors.New(cors.Config{
+		AllowAllOrigins: true,
+		AllowMethods:    []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:    []string{"Content-Type", "Authorization"},
+	}))
 
 	port := ctx.Port()
 
