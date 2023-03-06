@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 
 	"github.com/marlonbarreto-git/rest-api-crud-go/internal/infrastructure"
@@ -18,6 +19,10 @@ func main() {
 	server := &infrastructure.Server{}
 	gin.SetMode(gin.DebugMode)
 	server.Engine = gin.Default()
+
+	config := cors.DefaultConfig()
+	config.AllowAllOrigins = true
+	server.Use(cors.New(config))
 
 	port := ctx.Port()
 
