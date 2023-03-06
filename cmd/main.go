@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 
 	"github.com/marlonbarreto-git/rest-api-crud-go/internal/infrastructure"
@@ -31,6 +32,10 @@ func main() {
 			panic(interface{}(err))
 		}
 	}
+
+	config := cors.DefaultConfig()
+	config.AllowAllOrigins = true
+	server.Use(cors.New(config))
 
 	if err := server.Run(":" + port); err != nil {
 		panic(interface{}(err))
